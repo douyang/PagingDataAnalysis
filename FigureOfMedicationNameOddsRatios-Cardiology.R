@@ -1,6 +1,9 @@
 setwd("C:\\Users\\David\\Dropbox\\Stanford-IM\\Epic Research\\AccessLog2\\Paging Data Analysis")
 dir()
 
+
+#install.packages(c("Rcpp"))
+
 library(ggplot2)
 library(plyr)
 library(reshape2)
@@ -69,7 +72,6 @@ str(data)
 HighValues <- data[data$NewRatio>100,]
 LowValues <- data[data$NewRatio<0.01,]
 #data <- data[data$RatioForSort>0.01 & data$RatioForSort<100  ,]
-
 
 
 
@@ -254,3 +256,88 @@ ggsave("V3-ForTheBrandNames-AndFrequency.png", width = 3.5, height = 6.7)
 
 #data <- read.csv("Figure1Data-V2.csv", stringsAsFactors = FALSE)
 
+
+
+
+
+
+
+# Multivariate Analysis 
+
+
+data <- read.csv("CardsDrugsDates-V4-cost.csv", stringsAsFactors = FALSE)
+
+data$datetime <- strptime(data$Date.of.approval, "%m/%d/%Y")
+data$year <- data$datetime$year + 1900
+data$datetime <- as.POSIXct(data$datetime)
+
+
+
+
+data$Brand.Name.NumSyllables <- nchar( gsub( "[^X]", "", gsub( "[aeiouy]+", "X", tolower( data$Brand.Name ))))
+data$Generic.Name.NumSyllables <- nchar( gsub( "[^X]", "", gsub( "[aeiouy]+", "X", tolower( data$Generic.Name ))))
+data$NumSyllablesMoreInGenericName <- data$Generic.Name.NumSyllables - data$Brand.Name.NumSyllables
+
+data$BrandNameNumConsonants <- nchar(gsub("[^@]","",gsub("[^aeiouAEIOU]","@",data$Brand.Name)))
+data$BrandNameNumVowels <- nchar(gsub("[^@]","",gsub("[aeiouAEIOU]","@",data$Brand.Name)))
+data$BrandNameNchar <- nchar(data$Brand.Name)
+
+data$GenericNameNumConsonants <- nchar(gsub("[^@]","",gsub("[^aeiouAEIOU]","@",data$Generic.Name)))
+data$GenericNameNumVowels <- nchar(gsub("[^@]","",gsub("[aeiouAEIOU]","@",data$Generic.Name)))
+data$GenericNameNchar <- nchar(data$Generic.Name)
+
+data$NumCharMoreInGenericName <- data$GenericNameNchar - data$BrandNameNchar
+data$NumConMoreInGenericName <- data$GenericNameNumConsonants - data$BrandNameNumConsonants 
+data$NumVowelsMoreInGenericName <- data$GenericNameNumVowels - data$BrandNameNumVowels 
+
+data$MoreLettersInGeneric <- data$GenericNameNchar - data$BrandNameNchar
+
+
+
+model1 <- glm(data = data, Ratio.Of.Brand.Generic ~ Total.Count + datetime + Generic.Cost + On.Patent. + Category)
+summary(model1)
+
+model1 <- glm(data = data, Ratio.Of.Brand.Generic ~ Total.Count + datetime + Generic.Cost + Category + Brand.Name.NumSyllables)
+summary(model1)
+
+
+model1 <- glm(data = data, Ratio.Of.Brand.Generic ~ Total.Count + datetime + Generic.Cost + + On.Patent. + NumSyllablesMoreInGenericName )
+summary(model1)
+
+model1 <- glm(data = data, Ratio.Of.Brand.Generic ~ Total.Count + datetime + Generic.Cost + Category2 + NumSyllablesMoreInGenericName )
+summary(model1)
+
+model1 <- glm(data = data, Ratio.Of.Brand.Generic ~ Total.Count + datetime + Generic.Cost + Category2 + MoreLettersInGeneric )
+summary(model1)
+
+
+
+data$moreBrand <- data$Ratio.Of.Brand.Generic > 1
+
+
+model1 <- glm(data = data, moreBrand  ~ Total.Count + datetime + Generic.Cost + On.Patent. + Category2)
+summary(model1)
+
+model1 <- glm(data = data, moreBrand ~ Total.Count + datetime + Generic.Cost + Category + Brand.Name.NumSyllables)
+summary(model1)
+
+
+model1 <- glm(data = data, moreBrand  ~ Total.Count + datetime + Generic.Cost +  On.Patent. + NumSyllablesMoreInGenericName )
+summary(model1)
+
+model1 <- glm(data = data, moreBrand  ~ Total.Count + datetime + Generic.Cost + Category2 + MoreLettersInGeneric )
+summary(model1)
+
+
+data$hundredpages <- data$Total.Count / 100
+
+finalModel <- glm(data = data, moreBrand  ~ hundredpages + year + Generic.Cost + On.Patent. + Category + NumSyllablesMoreInGenericName )
+summary(finalModel )
+
+exp(cbind(OR = coef(finalModel ), confint(finalModel )))
+
+
+finalModel <- glm(data = data, moreBrand  ~ hundredpages + year + Generic.Cost + On.Patent. + Category + NumSyllablesMoreInGenericName )
+summary(finalModel )Brand
+
+exp(cbind(OR = coef(finalModel ), confint(finalModel )))
