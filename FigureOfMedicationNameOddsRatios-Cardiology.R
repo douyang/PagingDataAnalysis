@@ -22,7 +22,10 @@ HighValues <- data[data$NewRatio>100,]
 LowValues <- data[data$NewRatio<0.01,]
 #data <- data[data$RatioForSort>0.01 & data$RatioForSort<100  ,]
 
-
+ggplot(data,  aes(reorder(Brand.Name, -1*RatioForSort),Total.Count/3)) + theme_fivethirtyeight() + 
+scale_y_continuous( limits = c(0, 6000), breaks = c(0, 2000, 4000,6000), labels = c("0", "2k", "4k", "6k")) +
+geom_bar(stat = "identity") + coord_flip() + labs( x = "Number of Pages")
+ggsave("Cardiology-EP-NumberOfPages.png", height = 2.5, width = 3)
 
 
 ggplot(data, aes(NewRatio, reorder(Generic.Name, -1*RatioForSort), color = NewRatio, shape = Type)) + 
@@ -40,7 +43,7 @@ guides(color = guide_legend(title = "Ratio of Generic Name to Brand Name",
 		label.hjust = 12)
 
 
-ggsave("Cardiology-EP-RatioOfGenericToBrandName.png", width = 11, height = 4)
+#ggsave("Cardiology-EP-RatioOfGenericToBrandName.png", width = 11, height = 4)
 
 
 ggplot(data, aes(NewRatio, reorder(Brand.Name, -1*RatioForSort), color = NewRatio, shape = Type)) + 
@@ -57,7 +60,7 @@ guides(color = guide_legend(title = "Ratio of Generic Name to Brand Name",
 		breaks = c(0.01, 0.1, 1, 10, 100)),
 		label.hjust = 12)
 
-ggsave("Cardiology-EP-ForTheLegend.png", width = 11, height = 4)
+#ggsave("Cardiology-EP-ForTheLegend.png", width = 11, height = 4)
 
 
 
@@ -73,7 +76,10 @@ HighValues <- data[data$NewRatio>100,]
 LowValues <- data[data$NewRatio<0.01,]
 #data <- data[data$RatioForSort>0.01 & data$RatioForSort<100  ,]
 
-
+ggplot(data,  aes(reorder(Brand.Name, -1*RatioForSort),Total.Count/3)) + theme_fivethirtyeight() + 
+scale_y_continuous( limits = c(0, 6000), breaks = c(0, 2000, 4000,6000), labels = c("0", "2k", "4k", "6k")) +
+geom_bar(stat = "identity") + coord_flip() + labs( x = "Number of Pages")
+ggsave("Cardiology-Interventional-NumberOfPages.png", height = 2.5, width = 2)
 
 ggplot(data, aes(NewRatio, reorder(Generic.Name, -1*RatioForSort), color = NewRatio, shape = Type)) + 
 geom_point(alpha = 0.99, size = 4) + scale_shape_manual( values=c(78, 16, 80))+
@@ -131,6 +137,12 @@ LowValues <- data[data$NewRatio<0.01,]
 #data <- data[data$RatioForSort>0.01 & data$RatioForSort<100  ,]
 
 
+
+
+ggplot(data,  aes(reorder(Brand.Name, -1*RatioForSort),Total.Count/3)) + theme_fivethirtyeight() + 
+scale_y_continuous( limits = c(0, 6000), breaks = c(0, 2000, 4000,6000), labels = c("0", "2k", "4k", "6k")) +
+geom_bar(stat = "identity") + coord_flip() + labs( x = "Number of Pages")
+ggsave("Cardiology-HF-NumberOfPages.png", height = 8, width = 3)
 
 
 ggplot(data, aes(NewRatio, reorder(Generic.Name, -1*RatioForSort), color = NewRatio, shape = Type)) + 
