@@ -31,7 +31,7 @@ data[data$Ratio.lowerbound < 0.01,]$Ratio.lowerbound<- 0.0096
 colortext <- rep(1,96)
 colortext[11:13] <- 2
 colortext[17:18] <- 2
-colortext[27] <- 2
+colortext[27] <- 2 
 
 
 #data$Brand.Name.NumSyllables <- nchar( gsub( "[^X]", "", gsub( "[aeiouy]+", "X", tolower( data$Brand.Name ))))
@@ -66,7 +66,7 @@ geom_point(alpha = 0.99, size = 3) + scale_shape_manual( values=c(78, 16, 80)) +
 geom_rug(data = HighValues, aes(NewRatio), sides = 'r', size = 1.2) + 
 geom_errorbarh(size = 1, aes(xmin = Ratio.lowerbound, xmax = Ratio.upperbound, height = 0)) +
 scale_x_log10(limits = c(0.0095, 105), breaks = c(0.01, 0.1, 1, 10, 100), labels = c("0.01", "0.1", "1", "10", "100")) + theme_minimal() +
-theme(axis.text.y = element_text(hjust = .5, color = colortext, size = 12),  legend.position="none", axis.title.y = element_blank()) + scale_color_manual(values = c("black", "red")) +
+theme(axis.text.y = element_text(hjust = .5, color = colortext, size = 12),  legend.position="bottom", axis.title.y = element_blank()) + scale_color_manual(values = c("black", "red")) +
 labs( x = "Ratio of Mentions by Trade Name vs. Mentions by Generic Name" ,y = "")
 centerFigure 
 
@@ -130,7 +130,7 @@ geom_point(alpha = 0.99, size = 3) + scale_shape_manual( values=c(78, 16, 80)) +
 geom_rug(data = HighValues, aes(NewRatio), sides = 'r', size = 1.2) + 
 geom_errorbarh(size = 1, aes(xmin = Ratio.lowerbound, xmax = Ratio.upperbound, height = 0)) +
 scale_x_log10(limits = c(0.0095, 105), breaks = c(0.01, 0.1, 1, 10, 100), labels = c("0.01", "0.1", "1", "10", "100")) + theme_minimal() +
-theme(axis.text.y = element_text(hjust = .5, color = ColorText ),  legend.position="none", axis.title.y = element_blank()) + scale_color_manual(values = c("black", "red")) +
+theme(axis.text.y = element_text(hjust = .5, color = ColorText ),  legend.position="bottom", axis.title.y = element_blank()) + scale_color_manual(values = c("black", "red")) +
 labs( x = "Ratio of Mentions by Trade Name vs. Mentions by Generic Name" ,y = "")
 centerFigure 
 
